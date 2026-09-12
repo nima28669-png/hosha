@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Football Arena — Gift Lottery 🎁</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700;800;900&display=swap');
+  :root{
+    --bg:#0a0f1e; --card:#16213e; --card2:#1c2b52;
+    --gold:#ffd700; --purple:#7c4dff; --accent:#00e676; --green:#2ecc71;
+    --text:#eef2ff; --muted:#8fa3c8;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Vazirmatn',sans-serif;-webkit-tap-highlight-color:transparent}
+  body{background:radial-gradient(circle at 50% 0%,#221148 0%,var(--bg) 60%);color:var(--text);min-height:100vh;padding-bottom:20px}
+  .app{max-width:480px;margin:0 auto;padding:14px}
+
+  .header{display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid #2a3a6e;border-radius:20px;padding:12px 14px;margin-bottom:12px}
+  .hdr-title{font-weight:900;font-size:15px}
+  .coin-chip{display:flex;align-items:center;gap:6px;background:#0d1530;border:1px solid #2a3a6e;border-radius:30px;padding:8px 13px;font-weight:900;color:var(--gold);font-size:14px}
+
+  /* ===== Hero ===== */
+  .lot-hero{background:radial-gradient(circle at 50% 20%,#3a1d5e 0%,#150a28 75%);border:1px solid var(--purple);border-radius:24px;padding:20px 16px;text-align:center;position:relative;overflow:hidden}
+  .lot-hero::before{content:'';position:absolute;inset:-40% -20%;background:conic-gradient(from 0deg,transparent,rgba(124,77,255,.25),transparent 30%);animation:lotSpin 6s linear infinite;pointer-events:none}
+  @keyframes lotSpin{to{transform:rotate(360deg)}}
+  .lot-gift-img{width:170px;height:170px;object-fit:contain;position:relative;margin:4px auto;animation:giftFloat 2.8s ease-in-out infinite;filter:drop-shadow(0 0 30px rgba(124,77,255,.9));z-index:2}
+  .lot-emoji{font-size:110px;line-height:170px;position:relative;animation:giftFloat 2.8s ease-in-out infinite;filter:drop-shadow(0 0 30px rgba(124,77,255,.9));z-index:2}
+  @keyframes giftFloat{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-10px) rotate(4deg)}}
+  .lot-gift-name{font-weight:900;font-size:17px;position:relative}
+  .lot-gift-value{font-size:12px;color:var(--gold);font-weight:800;margin-top:3px;position:relative}
+  .lot-players{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:12px;position:relative}
+  .faces{display:flex}
+  .faces .f{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#2196f3,var(--purple));border:2px solid #150a28;margin-left:-7px;font-size:12px;display:flex;align-items:center;justify-content:center}
+  .faces .f:first-child{margin-left:0}
+  .lot-players .pc{font-size:12px;font-weight:800;color:#c5b8e8}
+  .lot-count{font-weight:900;font-size:22px;color:#fff;position:relative;margin-top:4px}
+  .lot-count small{font-size:11px;color:var(--muted);font-weight:700}
+  .lot-timer{font-weight:900;color:var(--gold);font-size:14px;margin:10px 0;position:relative}
+  .lot-join{position:relative;width:100%;border:none;border-radius:14px;padding:13px;font-weight:900;font-size:14px;background:linear-gradient(135deg,var(--purple),#651fff);color:#fff;cursor:pointer;font-family:'Vazirmatn',sans-serif}
+  .lot-me{position:relative;margin-top:10px;font-size:12px;color:var(--accent);font-weight:800}
+  .lot-cost{position:relative;font-size:11px;color:var(--muted);margin-top:8px}
+
+  /* ===== Filter chips ===== */
+  .filters{display:flex;gap:7px;margin:14px 2px 10px;overflow-x:auto;padding-bottom:2px}
+  .filter-chip{border:1px solid #2a3a6e;background:#0d1530;color:var(--muted);border-radius:20px;padding:7px 14px;font-size:11.5px;font-weight:800;cursor:pointer;white-space:nowrap;flex-shrink:0;font-family:'Vazirmatn',sans-serif}
+  .filter-chip.on{border-color:var(--gold);color:var(--gold);background:rgba(255,215,0,.1)}
+
+  /* ===== Gift grid ===== */
+  .section-title{font-size:15px;font-weight:900;margin:14px 4px 10px;display:flex;align-items:center;gap:8px}
+  .gift-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+  .gift-cell{background:linear-gradient(160deg,#1d1240,#150a28);border:1.5px solid #2a3a6e;border-radius:15px;padding:10px 4px 8px;text-align:center;cursor:pointer;transition:.2s;position:relative;overflow:hidden}
+  .gift-cell:active{transform:scale(.94)}
+  .gift-cell img{width:54px;height:54px;object-fit:contain;filter:drop-shadow(0 3px 8px rgba(0,0,0,.5))}
+  .gift-cell .g-emoji{font-size:38px;line-height:54px}
+  .gift-cell .g-name{font-size:8.5px;font-weight:700;color:#c5b8e8;margin-top:3px;line-height:1.2}
+  .gift-cell .g-star{font-size:8.5px;font-weight:900;color:var(--gold)}
+  .gift-cell.sel{border-color:var(--gold);box-shadow:0 0 14px rgba(255,215,0,.35)}
+  .gift-cell.sel::after{content:'✓';position:absolute;top:4px;left:6px;font-size:10px;color:var(--gold);font-weight:900}
+  .ribbon{position:absolute;top:9px;right:-24px;transform:rotate(35deg);background:var(--green);color:#fff;font-size:7px;font-weight:900;padding:2px 26px;letter-spacing:.3px}
+
+  /* ===== Recent / Winners ===== */
+  .recent-box{background:var(--card);border:1px solid #2a3a6e;border-radius:16px;padding:12px 14px;margin-top:12px}
+  .recent-box .rb-t{font-size:12px;font-weight:900;margin-bottom:8px;color:var(--muted)}
+  .recent-row{display:flex;justify-content:space-between;font-size:11.5px;padding:5px 0;color:#c5b8e8}
+  .recent-row b{color:var(--gold)}
+  .winner-row{display:flex;align-items:center;gap:9px;padding:6px 0;font-size:11.5px;color:#c5b8e8}
+  .winner-row img{width:26px;height:26px;object-fit:contain}
+  .winner-row .w-emoji{font-size:19px;width:26px;text-align:center}
+  .winner-row b{color:var(--gold)}
+
+  /* ===== Win modal ===== */
+  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:100;backdrop-filter:blur(4px)}
+  .modal-bg.show{display:flex}
+  .modal{background:linear-gradient(160deg,#2a1a5e,#150a28);border:1px solid var(--purple);border-radius:24px;padding:26px 22px;text-align:center;max-width:300px;width:88%;animation:popIn .35s ease}
+  @keyframes popIn{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+  .modal img{width:130px;height:130px;object-fit:contain;filter:drop-shadow(0 0 25px rgba(124,77,255,.9));animation:giftFloat 2s ease-in-out infinite}
+  .modal .m-emoji{font-size:95px;animation:giftFloat 2s ease-in-out infinite}
+  .modal .m-title{font-weight:900;font-size:17px;margin-top:6px}
+  .modal .m-sub{font-size:12px;color:#c5b8e8;margin-top:5px}
+  .modal button{width:100%;border:none;border-radius:13px;padding:12px;margin-top:16px;font-weight:900;font-size:14px;background:linear-gradient(135deg,var(--purple),#651fff);color:#fff;cursor:pointer;font-family:'Vazirmatn',sans-serif}
+
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--accent);color:#062a15;font-weight:800;padding:11px 20px;border-radius:30px;font-size:12.5px;opacity:0;transition:.3s;z-index:99;white-space:nowrap;max-width:92%}
+  .toast.show{opacity:1}
+  .toast.err{background:#ff5252;color:#fff}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <div class="hdr-title">🎁 Gift Lottery</div>
+    <div class="coin-chip">🪙 <span id="hdrCoins">0</span></div>
+  </div>
+
+  <div class="lot-hero">
+    <div id="lotMedia"></div>
+    <div class="lot-gift-name" id="lotName"></div>
+    <div class="lot-gift-value" id="lotVal"></div>
+    <div class="lot-players">
+      <div class="faces" id="lotFaces"></div>
+      <span class="pc">joined</span>
+    </div>
+    <div class="lot-count"><span id="lotCount">1,240</span> <small>players</small></div>
+    <div class="lot-timer" id="lotTimer">--:--:--</div>
+    <button class="lot-join" onclick="joinLottery()">🎟️ Join for 1,000 coins</button>
+    <div class="lot-cost">Each ticket = 1 chance to win the selected gift</div>
+    <div class="lot-me" id="lotMe"></div>
+  </div>
+
+  <div class="filters">
+    <button class="filter-chip on" data-f="all" onclick="setFilter('all')">All</button>
+    <button class="filter-chip" data-f="cheap" onclick="setFilter('cheap')">⭐ Under 1,000</button>
+    <button class="filter-chip" data-f="mid" onclick="setFilter('mid')">⭐ 1K–10K</button>
+    <button class="filter-chip" data-f="rich" onclick="setFilter('rich')">💎 10K+</button>
+  </div>
+
+  <div class="section-title">🏆 Choose the lottery gift</div>
+  <div class="gift-grid" id="giftGrid"></div>
+
+  <div class="recent-box">
+    <div class="rb-t">Recent participants</div>
+    <div id="lotRecent"></div>
+  </div>
+
+  <div class="recent-box" style="border-color:#7c4dff55">
+    <div class="rb-t">🎉 Last winners</div>
+    <div id="winList"></div>
+  </div>
+
+</div>
+
+<div class="modal-bg" id="winModal">
+  <div class="modal">
+    <div id="winMedia"></div>
+    <div class="m-title">🎉 Congratulations!</div>
+    <div class="m-sub" id="winSub"></div>
+    <button onclick="closeWin()">Awesome! 🎁</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const tg = window.Telegram?.WebApp;
+tg?.ready(); tg?.expand();
+function haptic(t2){ try{ tg?.HapticFeedback?.impactOccurred(t2||'light'); }catch(e){} }
+
+/* ============================================================
+   GIFTS
+   - id دارد → عکس واقعی از CDN لود می‌شود
+   - id خالی ('') → فعلاً ایموجی نشان داده می‌شود؛
+     هر وقت ID واقعی را از changes.tg گرفتی، فقط جایگذاری کن.
+   - resale: true → ریبون سبز «Resale»
+   ============================================================ */
+const GIFTS = [
+  /* ---- Budget ---- */
+  { id:'', emoji:'💖',  name:'Heart Ribbon',   stars:15  },
+  { id:'', emoji:'🧸',  name:'Teddy Bear',     stars:25  },
+  { id:'', emoji:'🎁',  name:'Gift Box',       stars:50  },
+  { id:'', emoji:'🌹',  name:'Eternal Rose',   stars:100 },
+  { id:'', emoji:'🎂',  name:'Birthday Cake',  stars:180, resale:true },
+
+  /* ---- Standard ---- */
+  { id:'5868455043362980631', name:'Heart Locket',  stars:1000 },
+  { id:'5936043693864651359', name:'Swiss Watch',   stars:1200 },
+  { id:'5868659926187901653', name:'Loot Bag',      stars:1500 },
+  { id:'5983471780763796287', name:'Santa Hat',     stars:2000, resale:true },
+  { id:'5846226946928673709', name:'Magic Potion',  stars:2500 },
+  { id:'5868220813026526561', name:'Toy Bear',      stars:3000 },
+  { id:'6014591077976114307', name:'Snoop Dogg',    stars:4000, resale:true },
+  { id:'5879737836550226478', name:'Mini Oscar',    stars:5000 },
+  { id:'5868503709637411929', name:'Diamond Ring',  stars:6000 },
+
+  /* ---- Rare ---- */
+  { id:'5882125812596999035', name:'Eternal Rose',  stars:8000 },
+  { id:'5915521180483191380', name:"Durov's Cap",   stars:12000, resale:true },
+  { id:'5936013938331222567', name:'Plush Pepe',    stars:15000 },
+];
+const giftImg = g => `https://cdn.changes.tg/gifts/originals/${g.id}/Original.png`;
+const hasImg  = g => !!g.id;
+function media(g, cls){
+  return hasImg(g)
+    ? `<img class="${cls==='lot'?'lot-gift-img':''}" src="${giftImg(g)}" alt="${g.name}" loading="lazy">`
+    : `<div class="${cls==='lot'?'lot-emoji':''}">${g.emoji||'🎁'}</div>`;
+}
+
+/* ================= STATE ================= */
+let S = load();
+function load(){
+  try{ const d = JSON.parse(localStorage.getItem('fa_lottery2')); if(d) return d; }catch(e){}
+  return { coins:5000, tickets:0, selGift:10 };
+}
+function save(){ localStorage.setItem('fa_lottery2', JSON.stringify(S)); document.getElementById('hdrCoins').textContent = num(S.coins); }
+
+/* ================= HELPERS ================= */
+const num = n => Number(Math.floor(n||0)).toLocaleString('en-US');
+function toast(msg, err){
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.className = 'toast show' + (err?' err':'');
+  setTimeout(()=> el.className='toast', 2200);
+}
+
+/* ================= FILTER ================= */
+let filter = 'all';
+function setFilter(f){
+  filter = f;
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.toggle('on', c.dataset.f===f));
+  renderGrid();
+}
+function passes(g){
+  if (filter==='cheap') return g.stars < 1000;
+  if (filter==='mid')   return g.stars >= 1000 && g.stars < 10000;
+  if (filter==='rich')  return g.stars >= 10000;
+  return true;
+}
+
+/* ================= GRID & HERO ================= */
+function renderGrid(){
+  const el = document.getElementById('giftGrid'); el.innerHTML='';
+  GIFTS.filter(passes).forEach(g=>{
+    const i = GIFTS.indexOf(g);
+    const d = document.createElement('div');
+    d.className = 'gift-cell' + (i===S.selGift?' sel':'');
+    d.innerHTML = `
+      ${g.resale ? '<div class="ribbon">Resale</div>' : ''}
+      ${media(g,'')}
+      <div class="g-name">${g.name}</div>
+      <div class="g-star">⭐ ${num(g.stars)}</div>`;
+    d.onclick = ()=>{
+      S.selGift = i;
+      renderGrid(); renderHero();
+      toast(`${g.name} selected 🎁`); haptic('light');
+    };
+    el.appendChild(d);
+  });
+}
+function renderHero(){
+  const g = GIFTS[S.selGift] || GIFTS[0];
+  document.getElementById('lotMedia').innerHTML = media(g,'lot');
+  document.getElementById('lotName').textContent = g.name;
+  document.getElementById('lotVal').textContent = `💎 ${num(g.stars)} ⭐ Stars value`;
+  document.getElementById('lotMe').textContent = S.tickets>0 ? `✅ Joined — ${num(S.tickets)} 🎟️` : '';
+}
+
+/* ================= LIVE COUNTERS ================= */
+let lotBase = 1240;
+const FACES = ['🐯','🐸','🐼','🦊'];
+const NAMES = ['Alex','Dmitri','Sara','Carlos','Nikita','Omar','Ivan','Lena','Marco','Zahra'];
+document.getElementById('lotFaces').innerHTML = FACES.map(x=>`<div class="f">${x}</div>`).join('');
+
+setInterval(()=>{ if (Math.random()<0.35) lotBase++; document.getElementById('lotCount').textContent = num(lotBase); }, 3000);
+
+function nextFriday(){
+  const d = new Date(); const diff = (5-d.getDay()+7)%7 || 7;
+  const t2 = new Date(d); t2.setDate(d.getDate()+diff); t2.setHours(20,0,0,0);
+  return t2;
+}
+setInterval(()=>{
+  const left = nextFriday() - Date.now();
+  const d = Math.floor(left/86400000), h = Math.floor(left%86400000/3600000), m = Math.floor(left%3600000/60000), s = Math.floor(left%60000/1000);
+  document.getElementById('lotTimer').textContent = `⏱ ${d}d ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}, 1000);
+
+function renderRecent(){
+  const el = document.getElementById('lotRecent');
+  let html = '';
+  for (let i=0;i<4;i++){
+    const n = NAMES[(Date.now()/30000 + i*3) % NAMES.length | 0];
+    html += `<div class="recent-row"><span>👤 ${n}</span><b>+${num(1+(i%3))} 🎟️</b></div>`;
+  }
+  el.innerHTML = html;
+}
+setInterval(renderRecent, 30000);
+
+/* ================= WINNERS ================= */
+function renderWinners(){
+  const el = document.getElementById('winList');
+  let html = '';
+  for (let i=0;i<3;i++){
+    const g = GIFTS[(Date.now()/60000 + i*5) % GIFTS.length | 0];
+    const n = NAMES[(Date.now()/60000 + i*7) % NAMES.length | 0];
+    const md = hasImg(g) ? `<img src="${giftImg(g)}" alt="">` : `<div class="w-emoji">${g.emoji||'🎁'}</div>`;
+    html += `<div class="winner-row">${md}<span>${n} won</span><b>${g.name}</b></div>`;
+  }
+  el.innerHTML = html;
+}
+setInterval(renderWinners, 60000);
+
+/* ================= JOIN & MOCK DRAW ================= */
+const LOT_COST = 1000;
+function joinLottery(){
+  if (S.coins < LOT_COST){ toast('Not enough coins! 🪙', true); return; }
+  S.coins -= LOT_COST; S.tickets += 1; lotBase += 1;
+  toast('Ticket bought! Good luck 🎟️'); haptic('success');
+  save(); renderHero(); renderRecent();
+  if (Math.random() < 0.10) setTimeout(showWin, 1200);
+}
+function showWin(){
+  const g = GIFTS[S.selGift];
+  document.getElementById('winMedia').innerHTML = media(g,'lot');
+  document.getElementById('winSub').textContent = `You won ${g.name} worth ${num(g.stars)} ⭐!`;
+  document.getElementById('winModal').classList.add('show');
+  haptic('heavy');
+}
+function closeWin(){ document.getElementById('winModal').classList.remove('show'); }
+
+/* ================= INIT ================= */
+renderHero(); renderGrid(); renderRecent(); renderWinners(); save();
+</script>
+</body>
+</html>
