@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
+body{margin:0;font-family:Vazirmatn,Tahoma;color:#fff;background:#0a0f1e;padding-bottom:110px;overflow-x:hidden}
+.page{display:none}.page.active{display:block;animation:fade .25s}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+.top{display:flex;align-items:center;justify-content:space-between;padding:14px 16px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand .lg{width:44px;height:44px;border-radius:14px;overflow:hidden;background:#141a30;box-shadow:0 4px 14px #0006}
+.brand .lg img{width:100%;height:100%;display:block;object-fit:cover}
+.brand small{display:block;font-size:10px;opacity:.5;margin-top:1px}
+.lvl{font-size:11px;font-weight:800;padding:7px 13px;border-radius:100px;background:#ffffff0f;border:1px solid #ffffff1f}
+.hero{text-align:center;padding:4px 0 2px}
+.hero .lbl{font-size:11px;opacity:.5}
+.bal{font-size:42px;font-weight:900;direction:ltr}
+.bal em{font-style:normal;font-size:13px;opacity:.5}
+.st{font-size:11px;padding:5px 14px;border-radius:100px;display:inline-block;margin-top:4px;background:#0d2a1e;border:1px solid #00e67644;color:#7dffd4}
+.st.off{background:#1a1f38;border-color:#ffffff22;color:#aaa}
+.stage{position:relative;width:260px;height:260px;margin:14px auto;display:flex;align-items:center;justify-content:center}
+.core{position:relative;width:180px;height:180px;border-radius:50%;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 40% 32%,#1e4d2b,#123320 60%,#0b1f14);border:1.5px solid #ffffff2e;transition:transform .12s}
+.core:active{transform:scale(.95)}
+.core img{width:64px;height:64px;border-radius:18px;pointer-events:none}
+.core .t1{font-size:22px;font-weight:900;direction:ltr;margin-top:8px}
+.core .t2{font-size:10px;opacity:.6;margin-top:2px}
+.core.on{border-color:#7dffd4;box-shadow:0 0 30px #00e67633}
+.orb{position:absolute;border-radius:50%;border:1px dashed #ffffff14;pointer-events:none}
+.orb.o1{inset:0}.orb.o2{inset:18px}.orb.o3{inset:36px}
+.dot{position:absolute;top:50%;left:50%;width:8px;height:8px;border-radius:50%;background:#ffcf3d;box-shadow:0 0 10px #ffcf3daa;animation:sat 6s linear infinite;transform-origin:0 0}
+@keyframes sat{from{transform:rotate(0) translateX(127px)}to{transform:rotate(360deg) translateX(127px)}}
+.fly{position:fixed;font-weight:900;color:#7dffd4;font-size:16px;pointer-events:none;z-index:60;animation:fly .8s forwards}
+@keyframes fly{to{opacity:0;transform:translateY(-110px)}}
+.hint{font-size:12px;opacity:.6;text-align:center}
+.btn{background:#1e3a2b;border:1px solid #ffffff26;color:#fff;padding:15px;border-radius:16px;font-size:15px;font-weight:800;width:88%;margin:7px auto;display:block;cursor:pointer;font-family:inherit;transition:transform .1s}
+.btn:active{transform:scale(.97)}
+.btn.main{background:linear-gradient(90deg,#1e6b4555,#0a5c9455);border-color:#2ecc7166}
+.btn.ghost{background:transparent}
+.btn.sm{width:auto;display:inline-block;padding:9px 18px;font-size:13px;margin:0}
+.card{background:#141a30;border:1px solid #ffffff16;border-radius:20px;padding:16px;margin:12px 16px;text-align:center}
+.card h3{margin:2px 0 10px;font-size:15px}
+.task{display:flex;justify-content:space-between;align-items:center;background:#1a2138;border:1px solid #ffffff14;border-radius:16px;padding:13px 14px;margin:9px 0;text-align:right}
+.task small{display:block;opacity:.5;margin-top:3px}
+.energy{margin:8px 24px;font-size:12px}
+.ebar{height:8px;background:#ffffff10;border-radius:100px;overflow:hidden;margin-top:6px}
+.ebar div{height:100%;width:100%;background:linear-gradient(90deg,#2ecc71,#ffcf3d);transition:width .3s}
+input{width:100%;padding:13px;border-radius:14px;border:1px solid #ffffff24;background:#0e1424;color:#fff;text-align:center;font-family:inherit}
+code{font-size:11px;word-break:break-all;direction:ltr;display:block;background:#0c1120;padding:9px;border-radius:10px}
+.tok-row{display:flex;justify-content:space-between;align-items:center;background:#1a2138;border-radius:14px;padding:12px 14px;margin:8px 0;font-size:13px}
+.tok-row b{direction:ltr}
+.tbar{height:12px;border-radius:100px;overflow:hidden;display:flex;margin:12px 4px 4px}
+.tbar div{height:100%}
+/* کارت فوتبالیست */
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 4px}
+.pcard{border-radius:18px;padding:12px 10px;text-align:center;border:1.5px solid;position:relative;overflow:hidden}
+.pcard .em{font-size:34px}
+.pcard .nm{font-size:12px;font-weight:900;margin-top:5px}
+.pcard .num{font-size:10px;opacity:.75;direction:ltr}
+.pcard .rar{font-size:9px;padding:3px 10px;border-radius:100px;display:inline-block;margin-top:5px;font-weight:800}
+.pcard .sell{margin-top:7px;font-size:11px;font-weight:800;padding:7px;border-radius:10px;border:none;width:100%;font-family:inherit;cursor:pointer}
+.r-common{background:linear-gradient(180deg,#2a2f45,#161a2b);border-color:#8e9fb555}.r-common .rar{background:#8e9fb533;color:#b9c6d8}.r-common .sell{background:#8e9fb522;color:#b9c6d8}
+.r-rare{background:linear-gradient(180deg,#0e3a6e,#0a1f3d);border-color:#00c9ff66}.r-rare .rar{background:#00c9ff22;color:#7ddcff}.r-rare .sell{background:#00c9ff22;color:#7ddcff}
+.r-epic{background:linear-gradient(180deg,#3d1166,#1d0830);border-color:#b14bff66}.r-epic .rar{background:#b14bff22;color:#d59bff}.r-epic .sell{background:#b14bff22;color:#d59bff}
+.r-legend{background:linear-gradient(180deg,#6b4a00,#2e1f00);border-color:#ffcf3d88}.r-legend .rar{background:#ffcf3d22;color:#ffdf85}.r-legend .sell{background:#ffcf3d22;color:#ffdf85}
+.r-legend::before{content:'👑';position:absolute;top:8px;left:10px;font-size:14px}
+.mrow{display:flex;justify-content:space-between;align-items:center;background:#1a2138;border:1px solid #ffffff14;border-radius:16px;padding:12px 14px;margin:8px 0}
+.mrow .info{text-align:right}
+.mrow .info b{font-size:13px}
+.mrow .info small{display:block;opacity:.55;font-size:11px;margin-top:2px}
+/* ===== قرعه‌کشی بازطراحی‌شده ===== */
+.lot-wrap{background:linear-gradient(160deg,#1a2138,#10152a);border:1px solid #ffffff1a;border-radius:24px;padding:22px 18px;margin:12px 16px;text-align:center;position:relative;overflow:hidden}
+.lot-wrap::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,#ffcf3d22,transparent 70%)}
+.lot-badge{font-size:10px;font-weight:800;letter-spacing:1px;background:#ffcf3d1c;border:1px solid #ffcf3d44;color:#ffdf85;padding:5px 14px;border-radius:100px;display:inline-block}
+.lot-ring{width:110px;height:110px;margin:16px auto 8px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 35% 30%,#2a3352,#141a30);border:2px solid #ffcf3d55;box-shadow:0 0 34px #ffcf3d22,inset 0 0 24px #0008}
+.lot-ring span{font-size:52px;filter:drop-shadow(0 6px 12px #000a)}
+.lot-name{font-size:14px;font-weight:800;color:#ffdf85}
+.lot-sub{font-size:11px;opacity:.55;margin-top:2px}
+.lot-timer{display:flex;justify-content:center;gap:8px;margin:14px 0 4px}
+.lot-timer div{background:#0e1424;border:1px solid #ffffff1f;border-radius:12px;padding:8px 0;width:58px}
+.lot-timer b{font-size:20px;direction:ltr;display:block;color:#fff}
+.lot-timer small{font-size:9px;opacity:.5}
+.chan{display:flex;justify-content:space-between;align-items:center;background:#0e1424;border:1px solid #ffffff14;border-radius:14px;padding:12px 14px;margin:8px 0;font-size:13px}
+.chan.ok{border-color:#00e67655;color:#7dffd4}
+.chan.ok::after{content:'✓';font-weight:900;margin-right:6px}
+.chan a{color:#7ddcff;text-decoration:none;font-weight:800}
+/* آرنا */
+.arena-hud{display:flex;justify-content:space-around;padding:4px 0;font-size:13px;font-weight:800}
+.arena-hud span{background:#1a2138;border:1px solid #ffffff1f;padding:6px 14px;border-radius:100px}
+#arGame{display:block;margin:8px auto;border-radius:18px;border:1px solid #ffffff1c;background:#0e5c2e;touch-action:none}
+.ar-ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0a0f1ee6;border-radius:18px;text-align:center;padding:20px}
+.ar-ov h2{margin:0 0 6px;font-size:22px}
+.ar-ov p{font-size:12px;opacity:.7;line-height:2;margin:0 0 14px}
+.tabbar{position:fixed;bottom:12px;right:12px;left:12px;background:#0f1526ee;border:1px solid #ffffff1c;border-radius:22px;display:flex;padding:9px 4px;backdrop-filter:blur(14px);z-index:20;box-shadow:0 12px 34px #000a}
+.tabbar div{flex:1;font-size:10px;opacity:.45;text-align:center;cursor:pointer}
+.tabbar div i{font-size:20px;font-style:normal;display:block;margin-bottom:2px}
+.tabbar div.active{opacity:1;color:#2ecc71}
+#toast{position:fixed;top:18px;left:50%;transform:translateX(-50%);background:#1a2138f2;border:1px solid #2ecc7155;color:#fff;padding:12px 22px;border-radius:100px;font-size:13px;font-weight:700;z-index:99;display:none;box-shadow:0 10px 30px #000a;max-width:92vw;text-align:center}
+</style>
+</head>
+<body>
+<div id="toast"></div>
+
+<div class="top">
+ <div class="brand">
+  <div class="lg"><img src="logo.png" alt="H"></div>
+  <div><b>HOSHA</b><small>⚽ فوتبال آرنا</small></div>
+ </div>
+ <div class="lvl" id="lvl">🥉 Bronze</div>
+</div>
+
+<div class="hero">
+ <div class="lbl">موجودی شما</div>
+ <div class="bal"><span id="bal">0.00</span> <em>$HOSHA</em></div>
+ <div><span class="st off" id="rate">⏸ ماینر خاموش</span></div>
+</div>
+
+<!-- ماین -->
+<div id="p-home" class="page active">
+ <div class="stage">
+  <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="dot"></div>
+  <div class="core" id="core">
+   <img src="logo.png" alt="H">
+   <div class="t1" id="farmtxt">READY</div>
+   <div class="t2" id="timer">برای شروع، دکمه زیر را بزن</div>
+  </div>
+ </div>
+ <div class="hint">👆 روی توپ طلا بزن — هر تپ <b style="color:#7dffd4">+0.5</b></div>
+ <button class="btn main" id="farmbtn">⛏️ شروع ماین (۸ ساعته)</button>
+ <button class="btn ghost" id="claimbtn">💎 برداشت</button>
+ <div class="energy">⚡ انرژی: <span id="en">1000</span>/1000
+  <div class="ebar"><div id="enbar"></div></div>
+ </div>
+ <div class="card"><h3>🚀 بوستر ×۲</h3>
+  <button class="btn" id="turbobtn">فعال‌سازی ۱ ساعته</button>
+  <div id="turboT" style="font-size:12px;color:#7dffd4;min-height:16px"></div>
+ </div>
+</div>
+
+<!-- آرنا -->
+<div id="p-arena" class="page">
+ <div class="arena-hud"><span style="color:#ff5f7d">❤️ <b id="arHP">3</b></span><span style="color:#ffcf3d">⚽ <b id="arSC">0</b></span><span>⏱️ <b id="arWV">0'</b></span></div>
+ <div style="position:relative">
+  <canvas id="arGame" width="340" height="440"></canvas>
+  <div class="ar-ov" id="arStart">
+   <h2>⚽ فوتبال آرنا</h2>
+   <p>مهاجم را با لمس حرکت بده.<br>انگشتت را روی دروازه بزن تا شوت کنی —<br>مواظب دروازه‌بان و تکل مدافع‌ها باش!</p>
+   <button class="btn main" style="width:auto" id="arGoBtn">🚀 شروع مسابقه</button>
+  </div>
+  <div class="ar-ov" id="arOver" style="display:none">
+   <h2 id="arRes">💥 تمام شد!</h2>
+   <p id="arResS"></p>
+   <button class="btn main" style="width:auto" id="arReBtn">🔄 مسابقه دوباره</button>
+  </div>
+ </div>
+ <div class="card" style="margin-top:12px">
+  <h3>🏆 رکورد و پاداش</h3>
+  <div style="display:flex;justify-content:space-around">
+   <div><div style="font-size:22px;font-weight:900;color:#ffcf3d" id="arBest">0</div><small style="opacity:.5">بهترین رکورد</small></div>
+   <div><div style="font-size:22px;font-weight:900;color:#7dffd4"><span id="arToday">0</span>/۱۰۰</div><small style="opacity:.5">پاداش امروز</small></div>
+  </div>
+  <p style="font-size:11px;opacity:.6;margin:10px 0 0">هر ۱۰ امتیاز = ۱ $HOSHA — سقف روزانه: ۲۰ (رکورد ۸۰۰+ → ۵۰، رکورد ۲۰۰۰+ → ۱۰۰)</p>
+ </div>
+</div>
+
+<!-- کارت‌ها -->
+<div id="p-cards" class="page">
+ <div class="card"><h3>🃏 کارت‌های فوتبالیست من</h3>
+  <p style="font-size:11px;opacity:.6;margin:4px 0 12px">با امتیاز ۱۵۰+ در آرنا کارت بگیر — کارت‌های افسانه‌ای شماره و بک‌گراند ویژه دارند. کارمزد فروش: ۵٪</p>
+  <div class="pgrid" id="myCards"></div>
+ </div>
+ <div class="card"><h3>🛒 مارکت نقل‌وانتقالات</h3>
+  <div id="market"></div>
+  <p style="font-size:10px;opacity:.45;margin-top:10px">⚠️ مارکت فعلاً نمایشی است — بعد از اتصال بک‌اند، خریدوفروش با TON واقعی می‌شود.</p>
+ </div>
+</div>
+
+<!-- قرعه‌کشی -->
+<div id="p-lottery" class="page">
+ <div class="lot-wrap">
+  <span class="lot-badge">🎁 قرعه‌کشی ساعتی — نمایشی</span>
+  <div class="lot-ring"><span id="lotGift">💎</span></div>
+  <div class="lot-name" id="lotName">گیفت الماس تلگرام</div>
+  <div class="lot-sub">برنده بعد از پایان شمارش به‌صورت تصادفی انتخاب می‌شود</div>
+  <div class="lot-timer">
+   <div><b id="ltM">00</b><small>دقیقه</small></div>
+   <div><b id="ltS">00</b><small>ثانیه</small></div>
+  </div>
+  <div class="chan" id="ch1"><span>📢 کانال هوشا</span><a href="https://t.me/your_channel" target="_blank">عضویت</a></div>
+  <div class="chan" id="ch2"><span>📢 کانال اخبار</span><a href="https://t.me/your_channel2" target="_blank">عضویت</a></div>
+  <button class="btn main" id="lotJoin" style="width:100%;margin-bottom:0">🎟️ شرکت در قرعه‌کشی — ۲۵ $HOSHA</button>
+  <div style="font-size:11px;opacity:.6;margin-top:10px">👥 شرکت‌کنندگان این دور: <b id="lotCount">0</b></div>
+ </div>
+</div>
+
+<!-- ماموریت‌ها -->
+<div id="p-tasks" class="page">
+ <div class="card"><h3>📋 ماموریت‌ها</h3>
+  <div class="task"><div>📢 عضویت در کانال<small>+۵۰ $HOSHA</small></div><button class="btn sm" data-task="ch" data-v="50">انجام</button></div>
+  <div class="task"><div>🎁 چک‌این روزانه<small>+۱۰۰ $HOSHA</small></div><button class="btn sm" data-task="daily" data-v="100">دریافت</button></div>
+  <div class="task"><div>⚽ ۱۰۰ تپ به توپ طلا<small>+۱۰۰ $HOSHA</small></div><button class="btn sm" data-task="tap100" data-v="100">دریافت</button></div>
+  <div class="task"><div>🥅 گلزنی در آرنا<small>+۲۰۰ $HOSHA</small></div><button class="btn sm" data-task="arena" data-v="200">دریافت</button></div>
+ </div>
+ <div class="card"><h3>🔥 کد مخفی</h3>
+  <input id="code" placeholder="کد مخفی">
+  <button class="btn" id="codebtn" style="width:100%;margin-top:10px">ثبت — جایزه ۵۰۰</button>
+ </div>
+</div>
+
+<!-- توکن -->
+<div id="p-tok" class="page">
+ <div class="card">
+  <h3>🪙 توکنومیکس $HOSHA</h3>
+  <div style="font-size:24px;font-weight:900;direction:ltr;color:#7dffd4">1,000,000,000</div>
+  <div style="font-size:11px;opacity:.6;margin-bottom:6px">کل عرضه — ثابت و محدود</div>
+  <div class="tbar"><div style="width:70%;background:linear-gradient(90deg,#2ecc71,#7dffd4)"></div><div style="width:30%;background:#7b2fff"></div></div>
+  <div class="tok-row"><div>👥 جامعه و ماینینگ</div><b style="color:#7dffd4">70%</b></div>
+  <div class="tok-row"><div>🏛️ خزانه و توسعه</div><b style="color:#b14bff">30%</b></div>
+  <p style="font-size:11px;opacity:.6;line-height:2;text-align:right">۷۰ درصد از طریق ماینینگ، ماموریت‌ها، فوتبال آرنا و رویدادها توزیع می‌شود. ۳۰ درصد صرف توسعه، لیستینگ و بازارسازی. عرضه اضافه‌ای وجود ندارد — هرچه زودتر ماین کنی، سهم بیشتری می‌بری.</p>
+ </div>
+</div>
+
+<!-- دوستان -->
+<div id="p-friends" class="page">
+ <div class="card"><h3>👥 دوستانت را دعوت کن</h3>
+  <p style="font-size:12px;opacity:.6;margin:6px 0 12px">به‌ازای هر دوست، پاداش می‌گیری</p>
+  <code id="reflink"></code>
+  <button class="btn" id="copybtn" style="width:100%">📋 کپی لینک دعوت</button>
+ </div>
+</div>
+
+<div class="tabbar">
+ <div data-page="home" class="active"><i>⛏️</i>ماین</div>
+ <div data-page="arena"><i>⚽</i>آرنا</div>
+ <div data-page="cards"><i>🃏</i>کارت‌ها</div>
+ <div data-page="lottery"><i>🎁</i>قرعه</div>
+ <div data-page="tasks"><i>📋</i>ماموریت</div>
+ <div data-page="tok"><i>🪙</i>توکن</div>
+ <div data-page="friends"><i>👥</i>دوستان</div>
+</div>
+
+<script>
+'use strict';
+var tg=window.Telegram.WebApp;try{tg.expand();}catch(e){}
+var uid=(tg.initDataUnsafe&&tg.initDataUnsafe.user)?tg.initDataUnsafe.user.id:0;
+function $(id){return document.getElementById(id);}
+function toast(m){var t=$('toast');t.innerText=m;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(function(){t.style.display='none';},2200);}
+
+/* STATE */
+var bal=parseFloat(localStorage.getItem('h_bal')||'0');
+var farmStart=parseFloat(localStorage.getItem('h_farm')||'0');
+var energy=parseInt(localStorage.getItem('h_en')!=null?localStorage.getItem('h_en'):'1000');
+var taps=parseInt(localStorage.getItem('h_taps')||'0');
+var turboUntil=parseFloat(localStorage.getItem('h_turbo')||'0');
+var arenaEarnToday=parseInt(localStorage.getItem('h_arToday')||'0');
+var arDay=localStorage.getItem('h_arDay')||'';
+var FARM_TIME=8*3600,REWARD=250;
+function arCap(){var b=+(localStorage.getItem('h_arBest')||0);if(b>=2000)return 100;if(b>=800)return 50;return 20;}
+(function(){var today=new Date().toDateString();if(arDay!==today){arDay=today;arenaEarnToday=0;localStorage.setItem('h_arDay',today);localStorage.setItem('h_arToday','0');}})();
+function save(){localStorage.setItem('h_bal',bal);localStorage.setItem('h_farm',farmStart);localStorage.setItem('h_en',energy);localStorage.setItem('h_taps',taps);}
+function perSec(){return (REWARD/FARM_TIME)*((Date.now()/1000)<turboUntil?2:1);}
+function mining(){return farmStart>0&&(Date.now()/1000-farmStart)<FARM_TIME;}
+
+function render(){
+ var shown=bal+(mining()?(Date.now()/1000-farmStart)*perSec():0);
+ $('bal').innerText=shown.toFixed(2);
+ $('en').innerText=energy;$('enbar').style.width=(energy/10)+'%';
+ var l='🥉 Bronze';if(bal>5000)l='🥈 Silver';if(bal>20000)l='🥇 Gold';if(bal>100000)l='💎 Diamond';
+ $('lvl').innerText=l;
+ var rate=$('rate'),fb=$('farmbtn');
+ if(!farmStart){$('farmtxt').innerText='READY';$('timer').innerText='برای شروع، دکمه زیر را بزن';$('core').classList.remove('on');rate.className='st off';rate.innerText='⏸ ماینر خاموش';fb.innerText='⛏️ شروع ماین (۸ ساعته)';}
+ else{var left=FARM_TIME-(Date.now()/1000-farmStart);
+  if(left<=0){$('farmtxt').innerText='+250 ✅';$('timer').innerText='برداشت کن!';rate.className='st';rate.innerText='✅ آماده برداشت';fb.innerText='💎 برداشت +250';}
+  else{var h=left/3600|0,m=(left%3600)/60|0,s=left%60|0;
+   $('farmtxt').innerText=(h<10?'0':'')+h+':'+(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+   $('timer').innerText='در حال ماین ⚡';$('core').classList.add('on');
+   rate.className='st';rate.innerText='⚡ +'+perSec().toFixed(4)+' /ثانیه';fb.innerText='⏳ در حال ماینینگ...';}}
+ $('turboT').innerText=(Date.now()/1000<turboUntil)?('🔥 بوستر فعال — '+Math.ceil(turboUntil-Date.now()/1000)+' ثانیه'):'';
+ $('arToday').innerText=arenaEarnToday;
+}
+
+/* ماینر */
+$('farmbtn').addEventListener('click',function(){
+ var n=Date.now()/1000;
+ if(farmStart>0&&n-farmStart>=FARM_TIME){claim();return;}
+ if(mining())return;
+ farmStart=n;save();render();toast('⛏️ ماینر روشن شد!');
+});
+$('claimbtn').addEventListener('click',claim);
+$('turbobtn').addEventListener('click',function(){turboUntil=Date.now()/1000+3600;localStorage.setItem('h_turbo',turboUntil);save();render();toast('🚀 بوستر ×۲ فعال شد');});
+$('core').addEventListener('pointerdown',function(e){
+ if(energy<=0){toast('⚡ انرژی تمام شد!');return;}
+ energy--;taps++;bal+=0.5;save();render();
+ var d=document.createElement('div');d.className='fly';d.innerText='+0.5';
+ d.style.left=(e.clientX-14)+'px';d.style.top=(e.clientY-24)+'px';
+ document.body.appendChild(d);setTimeout(function(){d.remove();},800);
+});
+function claim(){
+ if(!farmStart){toast('اول ماینر را روشن کن');return;}
+ if(Date.now()/1000-farmStart<FARM_TIME){toast('⏳ هنوز ۸ ساعت نشده');return;}
+ bal+=REWARD;farmStart=0;save();render();toast('💎 +250 $HOSHA برداشت شد!');
+}
+
+/* کارت‌های فوتبالیست */
+var PLAYERS=[
+ {n:'استار تازه‌کار',e:'⚽',r:0},{n:'دروازه‌بان سنگر',e:'🧤',r:0},
+ {n:'دفاع فولادین',e:'🛡️',r:0},{n:'هافبک موتور',e:'⚙️',r:1},
+ {n:'وینگر برق‌آسا',e:'⚡',r:1},{n:'مهاجم مرگبار',e:'🎯',r:2},
+ {n:'کاپیتان افسانه',e:'🎖️',r:2},{n:'گلزن طلایی',e:'👑',r:3}];
+var RARS=[{k:'r-common',n:'عادی',pay:15},{k:'r-rare',n:'کمیاب',pay:30},{k:'r-epic',n:'حماسی',pay:80},{k:'r-legend',n:'افسانه‌ای',pay:200}];
+var WEIGHTS=[55,28,13,4];
+var BGS=['linear-gradient(180deg,#2a2f45,#161a2b)','linear-gradient(180deg,#0e3a6e,#0a1f3d)','linear-gradient(180deg,#3d1166,#1d0830)','linear-gradient(180deg,#6b4a00,#2e1f00)'];
+function rollCard(){
+ var r=Math.random()*100,acc=0,ri=0;
+ for(var i=0;i<4;i++){acc+=WEIGHTS[i];if(r<acc){ri=i;break;}}
+ var p=PLAYERS.filter(function(x){return x.r===ri;});
+ var p0=p[Math.floor(Math.random()*p.length)]||PLAYERS[0];
+ var serial=Math.floor(Math.random()*9999)+1;
+ var special=(serial%111===0||serial%100===0||serial<10);
+ return {name:p0.n,emoji:p0.e,rar:RARS[ri].k,rarN:RARS[ri].n,pay:RARS[ri].pay,serial:serial,special:special,bg:BGS[ri],
+  num:(special?'No.'+serial+' ✨':'No.'+serial)};
+}
+function getCards(){return JSON.parse(localStorage.getItem('h_cards')||'[]');}
+function setCards(c){localStorage.setItem('h_cards',JSON.stringify(c));renderCards();}
+function renderCards(){
+ var cards=getCards(),box=$('myCards');
+ if(!cards.length){box.innerHTML='<p style="font-size:12px;opacity:.5;grid-column:1/3">هنوز کارتی نداری — در آرنا گل بزن!</p>';return;}
+ box.innerHTML=cards.map(function(c,i){
+  var s=c.special?'border-color:#ffcf3d;box-shadow:0 0 16px #ffcf3d33':'';
+  return '<div class="pcard '+c.rar+'" style="'+s+'"><div class="em">'+c.emoji+'</div><div class="nm">'+c.name+'</div><div class="num">'+c.num+'</div><div class="rar">'+c.rarN+(c.special?' ★':'')+'</div><button class="sell" data-sell="'+i+'">فروش — '+(c.special?150:c.pay)+' $HOSHA</button></div>';
+ }).join('');
+ box.querySelectorAll('[data-sell]').forEach(function(b){
+  b.addEventListener('click',function(){
+   var i=+b.getAttribute('data-sell'),cards=getCards(),c=cards[i];
+   var pay=c.special?150:c.pay;
+   cards.splice(i,1);setCards(cards);bal+=pay;save();render();
+   toast('💰 کارت فروخته شد — +'+pay+' $HOSHA');
+  });
+ });
+}
+function marketRender(){
+ var list=JSON.parse(localStorage.getItem('h_market')||'[]');
+ $('market').innerHTML=list.length?list.map(function(m){
+  return '<div class="mrow"><div class="info"><b>'+m.emoji+' '+m.name+'</b><small>'+m.rarN+' • '+m.num+'</small></div><button class="btn sm" data-buy="'+m.price+'">خرید '+m.price+'</button></div>';
+ }).join(''):'<p style="font-size:12px;opacity:.5">فروشگاه خالی است. کارت‌هایت را بفروش.</p>';
+ $('market').querySelectorAll('[data-buy]').forEach(function(b){
+  b.addEventListener('click',function(){
+   var p=+b.getAttribute('data-buy');
+   if(bal<p){toast('موجودی کافی نیست');return;}
+   bal-=p;save();render();
+   var list=JSON.parse(localStorage.getItem('h_market')||'[]');
+   list=list.filter(function(x){return x.price!==p;});
+   localStorage.setItem('h_market',JSON.stringify(list));
+   var cards=getCards();cards.push(rollCard());setCards(cards);marketRender();
+   toast('🛒 کارت خریداری شد!');
+  });
+ });
+}
+
+/* قرعه‌کشی نمایشی */
+var lotGifts=[{e:'💎',n:'گیفت الماس تلگرام'},{e:'🌹',n:'گیفت رز تلگرام'},{e:'🎉',n:'گیفت جشن تلگرام'},{e:'⚽',n:'گیفت فوتبال تلگرام'}];
+var lotEnd=localStorage.getItem('h_lotEnd');
+if(!lotEnd||+lotEnd<Date.now()){lotEnd=Date.now()+3600*1000;localStorage.setItem('h_lotEnd',lotEnd);}
+var lotJoined=false,lotFakeCount=120+Math.floor(Math.random()*300);
+setInterval(function(){
+ var left=Math.max(0,+lotEnd-Date.now());
+ var m=left/60000|0,s=left%60000/1000|0;
+ $('ltM').innerText=(m<10?'0':'')+m;$('ltS').innerText=(s<10?'0':'')+s;
+ if(left<=0){
+  if(lotJoined){toast('🎁 دور قبلی تمام شد — دور جدید شروع شد!');lotJoined=false;}
+  lotEnd=Date.now()+3600*1000;localStorage.setItem('h_lotEnd',lotEnd);
+  var g=lotGifts[Math.floor(Math.random()*lotGifts.length)];
+  $('lotGift').innerText=g.e;$('lotName').innerText=g.n;
+ }
+},1000);
+$('lotJoin').addEventListener('click',function(){
+ if(lotJoined){toast('قبلاً در این دور شرکت کرده‌ای 🎟️');return;}
+ if(!localStorage.getItem('h_lotCh1')||!localStorage.getItem('h_lotCh2')){toast('اول در هر دو کانال عضو شو');return;}
+ if(bal<25){toast('موجودی کافی نیست — ۲۵ $HOSHA لازم است');return;}
+ bal-=25;save();render();
+ lotJoined=true;lotFakeCount++;$('lotCount').innerText=lotFakeCount;
+ toast('🎟️ شرکت کردی! موفق باشی');
+});
+$('lotCount').innerText=lotFakeCount;
+$('ch1').querySelector('a').addEventListener('click',function(){$('ch1').classList.add('ok');localStorage.setItem('h_lotCh1','1');});
+$('ch2').querySelector('a').addEventListener('click',function(){$('ch2').classList.add('ok');localStorage.setItem('h_lotCh2','1');});
+
+/* ماموریت‌ها */
+document.querySelectorAll('[data-task]').forEach(function(b){
+ b.addEventListener('click',function(){
+  var k=b.getAttribute('data-task'),v=parseInt(b.getAttribute('data-v')),key='h_'+k;
+  if(k==='daily'){
+   var last=parseFloat(localStorage.getItem(key)||'0');
+   if(Date.now()-last<86400000){toast('🌙 فردا دوباره بیا');return;}
+   localStorage.setItem(key,Date.now());
+  }else if(k==='arena'){
+   if(localStorage.getItem('h_arena')!=='1'){toast('⚽ اول در آرنا گل بزن!');return;}
+   if(localStorage.getItem(key)){toast('قبلاً گرفتی ✅');return;}
+   localStorage.setItem(key,'1');
+  }else{
+   if(localStorage.getItem(key)){toast('قبلاً گرفتی ✅');return;}
+   if(k==='tap100'&&taps<100){toast('👆 '+taps+'/100 تپ');return;}
+   localStorage.setItem(key,'1');
+  }
+  bal+=v;save();render();toast('✅ +'+v+' $HOSHA');
+ });
+});
+$('codebtn').addEventListener('click',function(){
+ var c=$('code').value.trim().toUpperCase();
+ if(c==='HOSHA'){
+  var dk='h_code_'+new Date().toDateString();
+  if(localStorage.getItem(dk)){toast('امروز قبلاً استفاده کردی');return;}
+  localStorage.setItem(dk,'1');bal+=500;save();render();toast('🔥 +۵۰۰ $HOSHA');
+ }else toast('❌ کد اشتباه است');
+});
+
+/* دعوت */
+var reflink='https://t.me/HoshaStationBot?start='+uid;
+$('reflink').innerText=reflink;
+$('copybtn').addEventListener('click',function(){
+ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(reflink);toast('📋 کپی شد');}else toast(reflink);
+});
+
+/* تب‌ها */
+document.querySelectorAll('.tabbar div').forEach(function(t){
+ t.addEventListener('click',function(){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  $('p-'+t.getAttribute('data-page')).classList.add('active');
+  document.querySelectorAll('.tabbar div').forEach(function(x){x.classList.remove('active');});
+  t.classList.add('active');window.scrollTo(0,0);
+ });
+});
+
+setInterval(function(){if(energy<1000){energy++;save();}render();},1000);
+
+/* ================= فوتبال آرنا v2 =================
+   زمین واقعی + دروازه‌بان سیو می‌کند + شوت با لمس + فوتبالیست‌های واقعی */
+var cv=$('arGame'),cx=cv.getContext('2d'),ar=null;
+$('arBest').innerText=+(localStorage.getItem('h_arBest')||0);
+var W=340,H=440,GOAL_W=110,GOAL_Y=34;
+function drawPlayer(x,y,jersey,num,dir){ /* فوتبالیست واقعی */
+ cx.save();cx.translate(x,y);
+ cx.fillStyle='#f2c99b'; /* پاها */
+ cx.fillRect(-7,4,5,12);cx.fillRect(2,4,5,12);
+ cx.fillStyle='#fff'; /* شورت */
+ cx.fillRect(-8,-4,16,9);
+ cx.fillStyle=jersey; /* پیراهن */
+ cx.beginPath();cx.moveTo(-9,-4);cx.lineTo(9,-4);cx.lineTo(7,-18);cx.lineTo(-7,-18);cx.closePath();cx.fill();
+ cx.fillStyle='#f2c99b'; /* سر */
+ cx.beginPath();cx.arc(0,-25,6.5,0,7);cx.fill();
+ cx.fillStyle='#3a2a1a'; /* مو */
+ cx.beginPath();cx.arc(0,-27,6,Math.PI,0);cx.fill();
+ cx.fillStyle='#fff'; /* شماره */
+ cx.font='bold 8px Vazirmatn';cx.textAlign='center';cx.fillText(num,0,-8);
+ cx.restore();
+}
+function drawField(){
+ for(var r=0;r<8;r++){cx.fillStyle=r%2?'#0f6132':'#126a38';cx.fillRect(0,r*55,W,55);}
+ cx.strokeStyle='rgba(255,255,255,.4)';cx.lineWidth=2;
+ cx.strokeRect(16,16,W-32,H-32);           /* خطوط زمین */
+ cx.beginPath();cx.moveTo(16,H/2);cx.lineTo(W-14,H/2);cx.stroke(); /* خط وسط */
+ cx.beginPath();cx.arc(W/2,H/2,42,0,7);cx.stroke();                /* دایره وسط */
+ cx.beginPath();cx.arc(W/2,H/2,3,0,7);cx.fillStyle='rgba(255,255,255,.4)';cx.fill();
+ cx.strokeRect(W/2-80,16,160,58);          /* محوطه جریمه */
+ cx.strokeRect(W/2-38,16,76,24);           /* شش‌قدم */
+ /* دروازه با تور */
+ cx.fillStyle='rgba(0,0,0,.35)';cx.fillRect(W/2-GOAL_W/2,GOAL_Y-26,GOAL_W,26);
+ cx.strokeStyle='rgba(255,255,255,.25)';cx.lineWidth=1;
+ for(var gx=W/2-GOAL_W/2;gx<=W/2+GOAL_W/2;gx+=10){cx.beginPath();cx.moveTo(gx,GOAL_Y-26);cx.lineTo(gx,GOAL_Y);cx.stroke();}
+ for(var gy=GOAL_Y-26;gy<=GOAL_Y;gy+=7){cx.beginPath();cx.moveTo(W/2-GOAL_W/2,gy);cx.lineTo(W/2+GOAL_W/2,gy);cx.stroke();}
+ cx.strokeStyle='#fff';cx.lineWidth=4;
+ cx.beginPath();cx.moveTo(W/2-GOAL_W/2,GOAL_Y);cx.lineTo(W/2-GOAL_W/2,GOAL_Y-26);cx.lineTo(W/2+GOAL_W/2,GOAL_Y-26);cx.lineTo(W/2+GOAL_W/2,GOAL_Y);cx.stroke();
+}
+function drawBall(x,y,rot){
+ cx.save();cx.translate(x,y);cx.rotate(rot);
+ cx.fillStyle='#fff';cx.beginPath();cx.arc(0,0,6,0,7);cx.fill();
+ cx.fillStyle='#222';
+ cx.beginPath();cx.arc(0,0,2,0,7);cx.fill();
+ cx.beginPath();cx.arc(4,3,1.4,0,7);cx.fill();
+ cx.beginPath();cx.arc(-4,3,1.4,0,7);cx.fill();
+ cx.beginPath();cx.arc(0,-4.5,1.4,0,7);cx.fill();
+ cx.restore();
+}
+function arStart(){
+ $('arStart').style.display='none';$('arOver').style.display='none';
+ ar={x:W/2,y:H-80,hp:3,score:0,t:0,balls:[],defs:[],golds:[],keeper:{x:W/2,dir:1},rot:0,goalFx:0,alive:true};
+ requestAnimationFrame(arLoop);
+}
+function arLoop(){
+ if(!ar)return;
+ requestAnimationFrame(arLoop);
+ var a=ar;a.t++;
+ var minute=Math.min(90,Math.floor(a.t/12)); /* ۹۰ دقیقه در ~۱۸ ثانیه‌ی هر نیمه */
+ cx.clearRect(0,0,W,H);
+ drawField();
+ /* دروازه‌بان — سیو می‌کند */
+ var k=a.keeper;
+ k.x+=k.dir*1.6;
+ if(k.x>W/2+GOAL_W/2-12){k.dir=-1;}if(k.x<W/2-GOAL_W/2+12){k.dir=1;}
+ drawPlayer(k.x,GOAL_Y+14,'#e6b800','1',-1);
+ /* مهاجم تو */
+ drawPlayer(a.x,a.y,'#2e86ff','10',1);
+ /* موج مدافع‌ها */
+ var wave=1+Math.floor(a.t/300),defRate=Math.max(40,90-wave*8);
+ if(a.t%defRate===0)a.defs.push({x:30+Math.random()*(W-60),y:70,r:14,s:.7+wave*.12,ph:Math.random()*6,num:2+(Math.random()*8|0)});
+ for(var d of a.defs){
+  d.y+=d.s;d.x+=Math.sin((d.ph+=0.03))*1.1;
+  drawPlayer(d.x,d.y,'#ff4d5e',String(d.num),1);
+ }
+ /* شوت: هر ۵۵ تیک خودکار + شوت با لمس */
+ if(a.t%55===0)shoot(a.x,a.y);
+ /* توپ‌ها */
+ for(var b of a.balls){
+  b.x+=b.vx;b.y+=b.vy;a.rot+=0.25;
+  drawBall(b.x,b.y,a.rot);
+  /* سیو دروازه‌بان */
+  if(b.y<GOAL_Y+26&&b.y>GOAL_Y-10&&Math.abs(b.x-k.x)<16&&!b.done){b.done=true;cx.fillStyle='#ffcf3d';cx.font='bold 13px Vazirmatn';cx.textAlign='center';cx.fillText('سیو! 🧤',k.x,GOAL_Y+40);}
+  /* گل */
+  if(b.y<GOAL_Y&&b.y>GOAL_Y-24&&b.x>W/2-GOAL_W/2&&b.x<W/2+GOAL_W/2&&!b.done){
+   b.done=true;a.score+=25;a.goalFx=30;
+   toast('⚽ گووووول! +۲۵');
+  }
+ }
+ a.balls=a.balls.filter(function(b){return !b.done&&b.y>-10;});
+ if(a.goalFx>0){a.goalFx--;cx.fillStyle='#ffcf3d';cx.font='bold 26px Vazirmatn';cx.textAlign='center';cx.fillText('G O O O L ⚽',W/2,H/2-30);}
+ /* دفع توپ توسط مدافع */
+ for(var d2 of a.defs){
+  for(var b2 of a.balls){
+   if(!b2.done&&(b2.x-d2.x)*(b2.x-d2.x)+(b2.y-d2.y)*(b2.y-d2.y)<(14+6)*(14+6)){
+    b2.done=true;d2.dead=true;a.score+=5;
+    if(Math.random()<.4)a.golds.push({x:d2.x,y:d2.y});
+   }
+  }
+ }
+ a.defs=a.defs.filter(function(d){return !d.dead&&d.y<H+30;});
+ /* توپ طلا */
+ for(var g of a.golds){g.y+=2;drawBall(g.x,g.y,a.rot);cx.strokeStyle='#ffcf3d';cx.lineWidth=2;cx.beginPath();cx.arc(g.x,g.y,9,0,7);cx.stroke();}
+ a.golds=a.golds.filter(function(g){
+  if((g.x-a.x)*(g.x-a.x)+(g.y-a.y)*(g.y-a.y)<520){a.score+=5;return false;}
+  return g.y<H+10;
+ });
+ /* تکل مدافع به بازیکن */
+ for(var d3 of a.defs){
+  if((d3.x-a.x)*(d3.x-a.x)+(d3.y-a.y)*(d3.y-a.y)<26*26){d3.dead=true;a.hp--;toast('💥 تکل خوردی!');}
+ }
+ a.defs=a.defs.filter(function(d){return !d.dead;});
+ /* HUD */
+ $('arHP').innerText=Math.max(0,a.hp);
+ $('arSC').innerText=a.score;
+ $('arWV').innerText=minute+"'";
+ if(a.hp<=0||a.t>=1080){ /* پایان با باخت یا سوت پایان ۹۰ دقیقه */
+  a.alive=false;var sc=a.score;
+  var best=+(localStorage.getItem('h_arBest')||0);
+  if(sc>best)localStorage.setItem('h_arBest',sc);
+  $('arBest').innerText=Math.max(best,sc);
+  $('arRes').innerText=a.hp<=0?'💥 بازیکن‌ها خسته شدند!':'🏁 سوت پایان مسابقه!';
+  var earned=Math.floor(sc/10),cap=arCap(),room=Math.max(0,cap-arenaEarnToday);
+  var pay=Math.min(earned,room),extra='';
+  if(pay>0){bal+=pay;arenaEarnToday+=pay;save();render();extra=' | پاداش: +'+pay+' $HOSHA';}
+  else extra=' | سقف پاداش امروز پر شد';
+  if(sc>=150){
+   var c=rollCard(),cards=getCards();cards.push(c);setCards(c);
+   extra+=' | 🃏 کارت جدید: '+c.emoji+' '+c.name+' ('+c.rarN+(c.special?' ★':'')+')';
+  }
+  $('arResS').innerText='امتیاز نهایی: '+sc+extra;
+  if(localStorage.getItem('h_arena')!=='1'){localStorage.setItem('h_arena','1');toast('✅ ماموریت گلزنی باز شد!');}
+  $('arOver').style.display='flex';
+  ar=null;return;
+ }
+}
+function shoot(sx,sy){
+ if(!ar)return;
+ var tx=W/2+(Math.random()-0.5)*80,ty=GOAL_Y-8;
+ var dx=tx-sx,dy=ty-sy,dist=Math.sqrt(dx*dx+dy*dy)||1;
+ ar.balls.push({x:sx,y:sy-26,vx:dx/dist*7,vy:dy/dist*7,done:false});
+}
+function arMove(e){
+ if(!ar)return;
+ var r=cv.getBoundingClientRect(),t=e.touches?e.touches[0]:e;
+ var x=t.clientX-r.left,y=t.clientY-r.top;
+ /* لمس بالای خط وسط = شوت به آن سمت، لمس پایین = حرکت مهاجم */
+ if(y<H/2){shoot(ar.x,ar.y);}
+ else{ar.x=Math.max(16,Math.min(W-16,x));ar.y=Math.max(H/2+30,Math.min(H-20,y));}
+ if(e.cancelable)e.preventDefault();
+}
+cv.addEventListener('touchstart',arMove,{passive:false});
+cv.addEventListener('touchstart',arMove,{passive:false});
+cv.addEventListener('touchmove',arMove,{passive:false});
+cv.addEventListener('mousedown',function(e){if(ar){var r=cv.getBoundingClientRect();var y=e.clientY-r.top;if(y<H/2)shoot(ar.x,ar.y);else{ar.x=e.clientX-r.left;ar.y=Math.max(H/2+30,Math.min(H-20,y));}}});
+cv.addEventListener('mousemove',function(e){if(ar&&(e.buttons&1)){var r=cv.getBoundingClientRect();var y=e.clientY-r.top;if(y>=H/2){ar.x=Math.max(16,Math.min(W-16,e.clientX-r.left));ar.y=Math.max(H/2+30,Math.min(H-20,y));}}});
+$('arGoBtn').addEventListener('click',arStart);
+$('arReBtn').addEventListener('click',arStart);
+
+renderCards();marketRender();render();
+</script>
+</body>
+</html>
